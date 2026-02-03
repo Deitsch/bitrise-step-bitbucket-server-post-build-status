@@ -2,7 +2,27 @@
 
 Post build status to bitbucket server
 
-See step.yml for inputs
+## ⚙️ Configuration
+
+<details>
+<summary>Inputs</summary>
+
+| Key | Description | Flags | Default |
+| --- | --- | --- | --- |
+| `domain` | Bitbucket Server domain name without protocol eg 'my-domain.com' | required |  |
+| `username` | The username used to make REST calls to bitbucket server | required |  |
+| `password` | The password for the bitbucket server username | required |  |
+| `preset_status` | If not set to `AUTO`, this step will set a specific status instead of reporting the current build status. Can be one of `AUTO`, `INPROGRESS`, `SUCCESSFUL`, or `FAILED`. If you don't set this option, or select `AUTO`, the step will send `SUCCESSFUL` status if the current build status is `SUCCESSFUL` (no step failed previously) and `FAILED` status if the build previously failed. Use this to report `INPROGRESS` for builds that are just started. | required | "AUTO" |
+| `git_clone_commit_hash` |  Git commit hash | required | $GIT_CLONE_COMMIT_HASH |
+| `app_title` |  Bitrise app title | required | $BITRISE_APP_TITLE |
+| `build_number` |  Bitrise build number | required | $BITRISE_BUILD_NUMBER |
+| `build_url` |  Bitrise build url | required | $BITRISE_BUILD_URL |
+| `triggered_workflow_id` |  Bitrise triggered workflow id | required | $BITRISE_TRIGGERED_WORKFLOW_ID |
+</details>
+
+## BitBucket API
+
+Exact usage of the API BitBucket Rest request can seen in [`step.sh`](step.sh)
 
 ### Basic example
 
