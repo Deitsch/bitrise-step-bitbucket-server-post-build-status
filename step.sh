@@ -2,6 +2,7 @@
 
 join_ws() { local IFS=; local s="${*/#/$1}"; echo "${s#"$1$1$1"}"; }
 joinStrings() { local a=("${@:3}"); printf "%s" "$2${a[@]/#/$1}"; }
+verboseEcho() { [ "$verbose" = true ] && echo "$1"; }
 
 INVALID_INPUT=false
 if [ -z "$domain" ]; then
@@ -85,17 +86,36 @@ echo "API Endpoint: $BITBUCKET_API_ENDPOINT"
 #
 # Docs: https://developer.atlassian.com/server/bitbucket/how-tos/updating-build-status-for-commits/
 
-curl $BITBUCKET_API_ENDPOINT \
+json="{
+  \"state\": \"$BITBUCKET_BUILD_STATE\",
+  \"key\": \"Bitrise - $BITRISE_BUILD_SLUG - Build $triggered_workflow_id - #$BITRISE_BUILD_NUMBER\",
+  \"name\": \"Bitrise $app_title ($triggered_workflow_id) #$build_number\",
+  \"url\": \"$build_url\""
+
+if [[ -n "$tests_passed" && -n "$tests_failed" && -n "$tests_skipped" ]]; then
+  verboseEcho "appending testResults"
+  json+=", 
+    \"description\": \"workflow: prBuild | tests: ${tests_failed} failed, ${tests_passed} passed, ${tests_skipped} skipped\",
+    \"testResults\": {
+      \"failed\": $tests_failed,
+      \"successful\": $tests_passed,
+      \"skipped\": $tests_skipped
+    }"
+else
+  json+=", 
+    \"description\": \"workflow: $triggered_workflow_id\""
+fi
+
+json+="
+}"
+
+verboseEcho "final post body"
+verboseEcho "${json}"
+
+curl "$BITBUCKET_API_ENDPOINT" \
   -X POST \
   -i \
-  -u $username:$password \
+  -u "$username:$password" \
   -H 'Content-Type: application/json' \
-  --data-binary \
-      $"{
-        \"state\": \"$BITBUCKET_BUILD_STATE\",
-        \"key\": \"Bitrise - $BITRISE_BUILD_SLUG - Build $triggered_workflow_id - #$BITRISE_BUILD_NUMBER\",
-        \"name\": \"Bitrise $app_title ($triggered_workflow_id) #$build_number\",
-        \"url\": \"$build_url\",
-        \"description\": \"workflow: $triggered_workflow_id\"
-       }" \
-   --compressed
+  --data-binary "$json" \
+  --compressed

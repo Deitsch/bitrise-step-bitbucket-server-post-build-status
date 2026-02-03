@@ -9,15 +9,19 @@ Post build status to bitbucket server
 
 | Key | Description | Flags | Default |
 | --- | --- | --- | --- |
-| `domain` | Bitbucket Server domain name without protocol eg 'my-domain.com' | required |  |
-| `username` | The username used to make REST calls to bitbucket server | required |  |
-| `password` | The password for the bitbucket server username | required |  |
+| `domain` | Bitbucket Server domain name without protocol eg 'my-domain.com' | required | |
+| `username` | The username used to make REST calls to bitbucket server | required | |
+| `password` | The password for the bitbucket server username | required | |
 | `preset_status` | If not set to `AUTO`, this step will set a specific status instead of reporting the current build status. Can be one of `AUTO`, `INPROGRESS`, `SUCCESSFUL`, or `FAILED`. If you don't set this option, or select `AUTO`, the step will send `SUCCESSFUL` status if the current build status is `SUCCESSFUL` (no step failed previously) and `FAILED` status if the build previously failed. Use this to report `INPROGRESS` for builds that are just started. | required | "AUTO" |
 | `git_clone_commit_hash` |  Git commit hash | required | $GIT_CLONE_COMMIT_HASH |
 | `app_title` |  Bitrise app title | required | $BITRISE_APP_TITLE |
 | `build_number` |  Bitrise build number | required | $BITRISE_BUILD_NUMBER |
 | `build_url` |  Bitrise build url | required | $BITRISE_BUILD_URL |
 | `triggered_workflow_id` |  Bitrise triggered workflow id | required | $BITRISE_TRIGGERED_WORKFLOW_ID |
+| `tests_passed` |  The number of passed tests reported to BitBucket. All of Passed/Fail/Skipped have to be set to enable test result reporting | | |
+| `tests_failed` |  The number of failed tests reported to BitBucket. All of Passed/Fail/Skipped have to be set to enable test result reporting | | |
+| `tests_skipped` |  The number of skipped tests reported to BitBucket. All of Passed/Fail/Skipped have to be set to enable test result reporting | | |
+| `verbose` | Enhanced logging to get more information | required | false |
 </details>
 
 ## BitBucket API

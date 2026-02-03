@@ -84,3 +84,20 @@ inputs:
       title: Bitrise triggered workflow id
       is_dont_change_value: true
       is_required: true
+  - tests_failed:
+    opts:
+      title: Failed tests count
+      description: The number of failed tests reported to BitBucket
+  - tests_passed:
+    opts:
+      title: Passed tests count
+      description: The number of succeeded tests reported to BitBucket
+  - tests_skipped:
+    opts:
+      title: Skipped tests count
+      description: The number of skipped tests reported to BitBucket
+  - verbose: false
+    opts:
+      title: Enable logging 
+      description: Log more details of the step to help debug
+      is_required: true
